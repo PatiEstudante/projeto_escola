@@ -191,10 +191,16 @@ for etapa, valor in indicadores.items():
 
 
     # Exibir métricas lado a lado
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Anos Iniciais", f"{indicadores['Anos Iniciais']:.2f}")
-    col2.metric("Anos Finais", f"{indicadores['Anos Finais']:.2f}")
-    col3.metric("Ensino Médio", f"{indicadores['Ensino Médio']:.2f}")
+col1, col2, col3 = st.columns(3)
+
+for i, etapa in enumerate(["Anos Iniciais", "Anos Finais", "Ensino Médio"]):
+    valor = indicadores.get(etapa)
+    if valor is None:
+        [col1, col2, col3][i].warning(f"⚠️ Não foi possível calcular o IDERS para {etapa}. Verifique os dados.")
+    else:
+        [col1, col2, col3][i].metric(etapa, f"{valor:.2f}")
+
+
 
     # Opcional: gráfico comparativo
     st.bar_chart(pd.DataFrame.from_dict(indicadores, orient="index", columns=["IDERS 2023"]))
