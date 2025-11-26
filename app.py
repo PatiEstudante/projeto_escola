@@ -7,7 +7,7 @@ import plotly.express as px
 
 limites = pd.DataFrame({
     "Ano": ["5EF","5EF","9EF","9EF","3EM","3EM"],
-    "Disciplina": ["MT","PT","MT","PT","MT","PT"],
+    "Disciplina": ["MT","LP","MT","LP","MT","LP"],
     "Lim_Inferior": [60,49,100,100,111,117],
     "Lim_Superior": [322,324,400,400,467,451]
 })
