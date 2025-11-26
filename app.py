@@ -40,10 +40,13 @@ def calcular_proficiencia(df, etapa, disciplina):
 # 3. Função para calcular PMP
 
 def calcular_pmp(prof_media, ano, disciplina):
-    lim = limites[(limites["Ano"] == ano) & (limites["Disciplina"] == disciplina)].iloc[0]
-    pmp = ((prof_media - lim["Lim_Inferior"]) / (lim["Lim_Superior"] - lim["Lim_Inferior"])) * 10
-    return pmp
-
+    if prof_media is None:
+        return None
+    lim = limites[(limites["Ano"] == ano) & (limites["Disciplina"] == disciplina)]
+    if lim.empty:
+        return None  # evita IndexError
+    lim = lim.iloc[0]
+    return ((prof_media - lim["Lim_Inferior"]) / (lim["Lim_Superior"] - lim["Lim_Inferior"])) * 10
 
 # 4. Funções de rendimento
 
@@ -66,7 +69,7 @@ def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_med
     # Anos iniciais
     prof_lp = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 5º ANO", "LP")
     prof_mt = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 5º ANO", "MT")
-    pmp_lp = calcular_pmp(prof_lp, "5EF", "PT")
+    pmp_lp = calcular_pmp(prof_lp, "5EF", "LP")
     pmp_mt = calcular_pmp(prof_mt, "5EF", "MT")
     prof_iniciais = (pmp_lp + pmp_mt)/2
     rend_iniciais = rendimento_anos_iniciais(df_rendimento_fundamental)
@@ -75,7 +78,7 @@ def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_med
     # Anos finais
     prof_lp9 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 9º ANO", "LP")
     prof_mt9 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 9º ANO", "MT")
-    pmp_lp9 = calcular_pmp(prof_lp9, "9EF", "PT")
+    pmp_lp9 = calcular_pmp(prof_lp9, "9EF", "LP")
     pmp_mt9 = calcular_pmp(prof_mt9, "9EF", "MT")
     prof_finais = (pmp_lp9 + pmp_mt9)/2
     rend_finais = rendimento_anos_finais(df_rendimento_fundamental)
@@ -84,7 +87,7 @@ def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_med
     # Ensino médio
     prof_lp3 = calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "LP")
     prof_mt3 = calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "MT")
-    pmp_lp3 = calcular_pmp(prof_lp3, "3EM", "PT")
+    pmp_lp3 = calcular_pmp(prof_lp3, "3EM", "LP")
     pmp_mt3 = calcular_pmp(prof_mt3, "3EM", "MT")
     prof_medio = (pmp_lp3 + pmp_mt3)/2
     rend_medio = rendimento_ensino_medio(df_rendimento_medio)
