@@ -17,8 +17,8 @@ diag_habilidades_abaixo = diagnostica[diagnostica["HABILIDADE - FAIXA"].isin(["B
 diag_habilidades_abaixo = diag_habilidades_abaixo.sort_values("HABILIDADE - ACERTO %")
 fig = px.bar(
     diag_habilidades_abaixo,
-    x="HABILIDADE - DESCRIÇÃO",
-    y="HABILIDADE - ACERTO %",
+    x="HABILIDADE - ACERTO %",
+    y="HABILIDADE - DESCRIÇÃO",
     color="HABILIDADE - FAIXA",
     orientation="h",
     title="Habilidades que precisam ser melhoradas",
