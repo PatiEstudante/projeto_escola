@@ -38,6 +38,7 @@ fig = px.bar(
     y="HABILIDADE - DESCRIÇÃO",
     color="HABILIDADE - FAIXA",
     orientation="h",
+    facet_col="COMPONENTE CURRICULAR,
     title="Habilidades que precisam ser melhoradas",
     text="HABILIDADE - ACERTO %",
     color_discrete_map={"Baixo":"#e63946", "Médio Baixo":"#f4a261"}
