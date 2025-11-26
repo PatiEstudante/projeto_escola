@@ -13,6 +13,7 @@ import pandas as pd
 import plotly.express as px
 diagnostica = pd.read_csv("df_diagnostico.csv")
 somativa = pd.read_csv("df_somativa.csv")
+simulado = pd.read_csv("df_simulado_saeb.csv")
 
 diag_habilidades_abaixo = diagnostica[diagnostica["HABILIDADE - FAIXA"].isin(["Baixo", "Médio Baixo"])]
 diag_habilidades_abaixo = diag_habilidades_abaixo.sort_values("HABILIDADE - ACERTO %")
