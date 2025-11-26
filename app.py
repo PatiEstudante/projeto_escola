@@ -39,7 +39,8 @@ fig = px.bar(
     color="HABILIDADE - FAIXA",
     orientation="h",
     title="Habilidades que precisam ser melhoradas",
-    text="HABILIDADE - ACERTO %"
+    text="HABILIDADE - ACERTO %",
+    color_discrete_map={"Baixo":"#e63946", "Médio Baixo":"#f4a261"}
 )
 
 fig.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
