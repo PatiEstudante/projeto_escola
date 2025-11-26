@@ -18,19 +18,21 @@ diag_habilidades_abaixo = diagnostica[diagnostica["HABILIDADE - FAIXA"].isin(["B
 diag_habilidades_abaixo = diag_habilidades_abaixo.sort_values("HABILIDADE - ACERTO %")
 
 def quebrar_texto(texto, limite=50):
-    if len(texto) > limite:
-        partes = texto.split(" ")
-        linha1 = ""
-        linha2 = ""
-        for palavra in partes:
-            if len(linha1) + len(palavra) < limite:
-                linha1 += palavra + " "
-            else:
-                linha2 += palavra + " "
-        return linha1.strip() + "\n" + linha2.strip()
-    else:
-        return texto
-diag_habilidades_abaixo["HABILIDADE - DESCRIÇÃO"] = diag_habilidades_abaixo["HABILIDADE - DESCRIÇÃO"].apply(quebrar_texto)
+    palavras = texto.split(" ")
+    linhas = []
+    linha_atual = ""
+    for palavra in palavras:
+        if len(linha_atual) + len(palavra) < limite:
+            linha_atual += palavra + " "
+        else:
+            linhas.append(linha_atual.strip())
+            linha_atual = palavra + " "
+    linhas.append(linha_atual.strip())
+    return "\n".join(linhas)
+
+diag_habilidades_abaixo["HABILIDADE - DESCRIÇÃO"] = (
+    diag_habilidades_abaixo["HABILIDADE - DESCRIÇÃO"].apply(quebrar_texto)
+)
 
 fig = px.bar(
     diag_habilidades_abaixo,
