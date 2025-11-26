@@ -28,8 +28,7 @@ def quebrar_texto(texto, limite=50):
     else:
         return texto
 diag_habilidades_abaixo["HABILIDADE - DESCRIÇÃO"] = diag_habilidades_abaixo["HABILIDADE - DESCRIÇÃO"].apply(quebrar_texto)
-diag_habilidades_abaixo = diagnostica[diagnostica["HABILIDADE - FAIXA"].isin(["Baixo", "Médio Baixo"])]
-diag_habilidades_abaixo = diag_habilidades_abaixo.sort_values("HABILIDADE - ACERTO %")
+
 
 fig = px.bar(
     diag_habilidades_abaixo,
