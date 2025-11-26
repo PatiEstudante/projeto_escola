@@ -66,14 +66,14 @@ fig_acima = px.bar(
     hover_data=["COMPONENTE CURRICULAR"],
     title="🟢 Habilidades consolidadas",
     text="HABILIDADE - ACERTO %",
-    color_discrete_map={"Médio Alto":"#2a9d8f", "Alto":"#1d3557"}
+    color_discrete_map={"Médio Alto":"#457b9d", "Alto":"#2a9d8f"}}
 )
 
 fig_acima.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
 fig_acima.update_layout(yaxis_title="Habilidade", xaxis_title="Percentual de Acerto", height=800, font=dict(size=12))
 
 # Tabs para exibir os gráficos
-tab1, tab2 = st.tabs(["🔴 A melhorar", "🟢 Consolidadas"])
+tab1, tab2 = st.tabs(["🔴 Pontos a melhorar", "🟢 Pontos a manter"])
 
 with tab1:
     st.plotly_chart(fig_abaixo, use_container_width=True)
