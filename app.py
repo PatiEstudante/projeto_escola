@@ -66,7 +66,7 @@ fig_acima = px.bar(
     hover_data=["COMPONENTE CURRICULAR"],
     title="🟢 Habilidades consolidadas",
     text="HABILIDADE - ACERTO %",
-    color_discrete_map={"Médio Alto":"#457b9d", "Alto":"#2a9d8f"}}
+    color_discrete_map={"Médio Alto":"#457b9d", "Alto":"#2a9d8f"}
 )
 
 fig_acima.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
