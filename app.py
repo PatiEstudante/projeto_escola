@@ -16,6 +16,8 @@ somativa = pd.read_csv("df_somativa.csv")
 
 diag_habilidades_abaixo = diagnostica[diagnostica["HABILIDADE - FAIXA"].isin(["Baixo", "Médio Baixo"])]
 diag_habilidades_abaixo = diag_habilidades_abaixo.sort_values("HABILIDADE - ACERTO %")
+diag_habilidades_acima = diagnostica[diagnostica["HABILIDADE - FAIXA"].isin(["Médio Alto", "Alto"])]
+diag_habilidades_acima = diag_habilidades_acima.sort_values("HABILIDADE - ACERTO %")
 
 def quebrar_texto(texto, limite=50):
     palavras = texto.split(" ")
@@ -33,6 +35,9 @@ def quebrar_texto(texto, limite=50):
 diag_habilidades_abaixo["HABILIDADE - DESCRIÇÃO"] = (
     diag_habilidades_abaixo["HABILIDADE - DESCRIÇÃO"].apply(quebrar_texto)
 )
+diag_habilidades_acima["HABILIDADE - DESCRIÇÃO"] = (
+    diag_habilidades_acima["HABILIDADE - DESCRIÇÃO"].apply(quebrar_texto)
+)    
 
 fig = px.bar(
     diag_habilidades_abaixo,
@@ -48,4 +53,30 @@ fig = px.bar(
 
 fig.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
 fig.update_layout(yaxis_title="Habilidade", xaxis_title="Percentual de Acerto", height=800, font=dict(size=12))
+
+
+fig2 = px.bar(
+    diag_habilidades_acima,
+    x="HABILIDADE - ACERTO %",
+    y="HABILIDADE - DESCRIÇÃO",
+    color="HABILIDADE - FAIXA",
+    orientation="h",
+    hover_data=["COMPONENTE CURRICULAR"],
+    title="Habilidades consolidadas",
+    text="HABILIDADE - ACERTO %",
+    color_discrete_map={
+        "Médio Alto": "#2a9d8f",  # verde
+        "Alto": "#1d3557"         # azul escuro
+    }
+)
+
+fig2.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
+fig2.update_layout(
+    yaxis_title="Habilidade",
+    xaxis_title="Percentual de Acerto",
+    height=800,
+    font=dict(size=12)
+)
+
 st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig2, use_container_width=True)
