@@ -14,6 +14,9 @@ import plotly.express as px
 diagnostica = pd.read_csv("df_diagnostico.csv")
 somativa = pd.read_csv("df_somativa.csv")
 
+diag_habilidades_abaixo = diagnostica[diagnostica["HABILIDADE - FAIXA"].isin(["Baixo", "Médio Baixo"])]
+diag_habilidades_abaixo = diag_habilidades_abaixo.sort_values("HABILIDADE - ACERTO %")
+
 def quebrar_texto(texto, limite=50):
     if len(texto) > limite:
         partes = texto.split(" ")
@@ -28,7 +31,6 @@ def quebrar_texto(texto, limite=50):
     else:
         return texto
 diag_habilidades_abaixo["HABILIDADE - DESCRIÇÃO"] = diag_habilidades_abaixo["HABILIDADE - DESCRIÇÃO"].apply(quebrar_texto)
-
 
 fig = px.bar(
     diag_habilidades_abaixo,
