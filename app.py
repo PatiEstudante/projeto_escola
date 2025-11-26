@@ -21,6 +21,7 @@ fig = px.bar(
     x="HABILIDADE - DESCRIÇÃO",
     y="HABILIDADE - ACERTO %",
     color="HABILIDADE - FAIXA",
+    orientation="h",
     title="Habilidades que precisam ser melhoradas",
     text="HABILIDADE - ACERTO %"
 )
