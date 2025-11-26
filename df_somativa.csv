@@ -1,0 +1,44 @@
+REDE,ETAPA,DISCIPLINA,CD_HABILIDADE,DC_HABILIDADE,TX_ACERTO,FAIXA DA HABILIDADE
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,LP,H 01 (D09),Identificar a finalidade de textos de diferentes gêneros.,54,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,LP,H 02 (D15),"Reconhecer diferentes formas de tratar uma informação na comparação de textos que tratam do mesmo tema, em função das condições em que ele foi produzido e daquelas em que será recebido.",17,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,LP,H 03 (D01),Localizar informações explícitas em um texto.,56,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,LP,H 04 (D03),Inferir o sentido de uma palavra ou expressão.,48,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,LP,H 05 (D04),Inferir uma informação implícita em um texto.,48,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,LP,H 06 (D13),Identificar efeitos de ironia ou humor em textos variados.,43,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,LP,H 07 (D14),Reconhecer o efeito de sentido decorrente do uso da pontuação e de outras notações.,32,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,LP,H 08 (D06),Identificar o tema de um texto.,71,Médio Alto
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,LP,H 09 (D07),Identificar o conflito gerador do enredo e os elementos que constroem a narrativa.,50,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,LP,H 10 (D02),"Estabelecer relações entre partes de um texto, identificando repetições ou substituições que contribuem para a continuidade de um texto.",45,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,LP,H 11 (D11),Distinguir um fato da opinião relativa a esse fato.,30,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,LP,H 12 (D12),"Estabelecer relações lógico-discursivas presentes no texto, marcadas por conjunções, advérbios, etc.",27,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,LP,H 13 (D10),Identificar as marcas linguísticas que evidenciam o locutor e o interlocutor de um texto.,57,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,LP,H 14 (D05),"Interpretar texto com auxílio de material gráfico diverso (propagandas, quadrinhos, foto, etc.).",45,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,LP,H 15 (D08),Estabelecer relação causa/consequência entre partes e elementos do texto.,50,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 01 (D01),"Identificar a localização/movimentação de objeto em mapas, croquis e outras representações gráficas.",64,Médio Alto
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 02 (D02),"Identificar propriedades comuns e diferenças entre poliedros e corpos redondos, relacionando figuras tridimensionais com suas planificações.",38,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 03 (D03),"Identificar propriedades comuns e diferenças entre figuras bidimensionais pelo número de lados, pelos tipos de ângulos.",56,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 04 (D04),"Identificar quadriláteros observando as posições relativas entre seus lados (paralelos, concorrentes, perpendiculares).",38,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 05 (D05),"Reconhecer a conservação ou modificação de medidas dos lados, do perímetro, da área em ampliação e/ou redução de figuras poligonais usando malhas quadriculadas.",42,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 06 (D06),Estimar a medida de grandezas utilizando unidades de medida convencionais ou não.,50,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 07 (D07),"Resolver problemas significativos utilizando unidades de medida padronizadas como km/m/cm/mm, kg/g/mg, l/ml.",36,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 08 (D08),Estabelecer relações entre unidades de medida de tempo.,31,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 09 (D09),Estabelecer relações entre o horário de início e término e/ou o intervalo da duração de um evento ou acontecimento.,17,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 10 (D10),"Num problema, estabelecer trocas entre cédulas e moedas do sistema monetário brasileiro, em função de seus valores.",31,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 11 (D11),"Resolver problema envolvendo o cálculo do perímetro de figuras planas, desenhadas em malhas quadriculadas.",25,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 12 (D12),"Resolver problema envolvendo o cálculo ou estimativa de áreas de figuras planas, desenhadas em malhas quadriculadas.",42,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 13 (D13),"Reconhecer e utilizar características do sistema de numeração decimal, tais como agrupamentos e trocas na base 10 e princípio do valor posicional.",55,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 14 (D14),Identificar a localização de números naturais na reta numérica.,23,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 15 (D22),Identificar a localização de números racionais representados na forma decimal na reta numérica.,46,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 16 (D15),Reconhecer a decomposição de números naturais nas suas diversas ordens.,44,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 17 (D16),Reconhecer a composição e a decomposição de números naturais em sua forma polinomial.,33,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 18 (D17),Calcular o resultado de uma adição ou subtração de números naturais.,56,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 19 (D18),Calcular o resultado de uma multiplicação ou divisão de números naturais.,33,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 20 (D19),"Resolver problema com números naturais, envolvendo diferentes significados da adição ou subtração: juntar, alteração de um estado inicial (positiva ou negativa), comparação e mais de uma transforma...",50,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 21 (D20),"Resolver problema com números naturais, envolvendo diferentes significados da multiplicação ou divisão: multiplicação comparativa, ideia de proporcionalidade, configuração retangular e combinatória.",33,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 22 (D21),Identificar diferentes representações de um mesmo número racional.,33,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 23 (D23),Resolver problema utilizando a escrita decimal de cédulas e moedas do sistema monetário brasileiro.,30,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 24 (D24),Identificar fração como representação que pode estar associada a diferentes significados.,18,Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 25 (D25),Resolver problema com números racionais expressos na forma decimal envolvendo diferentes significados da adição ou subtração.,46,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 26 (D26),"Resolver problema envolvendo noções de porcentagem (25%, 50%, 100%).",42,Médio Baixo
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 27 (D27),Ler informações e dados apresentados em tabelas.,71,Médio Alto
+ESTADUAL,ENSINO FUNDAMENTAL DE 9 ANOS - 5º ANO,MT,H 28 (D28),Ler informações e dados apresentados em gráficos (particularmente em gráficos de colunas).,73,Médio Alto
