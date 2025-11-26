@@ -42,5 +42,5 @@ fig = px.bar(
 )
 
 fig.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
-fig.update_layout(yaxis_title="Habilidade", xaxis_title="Percentual de Acerto", height=800, font=dict(size=12)
+fig.update_layout(yaxis_title="Habilidade", xaxis_title="Percentual de Acerto", height=800, font=dict(size=12))
 st.plotly_chart(fig, use_container_width=True)
