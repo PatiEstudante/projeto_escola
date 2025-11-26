@@ -21,15 +21,16 @@ st.markdown("<h1 style='color:#1d3557;'>📊 Painel de Desempenho Escolar</h1>",
 
 # Sidebar com filtro por turma
 st.sidebar.title("🎯 Filtros")
-turma_selecionada = st.sidebar.selectbox("Selecione a turma", ["Todas"] + list(pd.read_csv("df_diagnostico.csv")["TURMA"].unique()))
+turma_selecionada = st.sidebar.selectbox("Selecione a turma", ["Todas"] + list(pd.read_csv("df_diagnostico.csv")["ANO ESCOLAR"].unique()))
 
 # Carregar dados
 diagnostica = pd.read_csv("df_diagnostico.csv")
+diagnostica.columns = diagnostica.columns.str.strip()
 somativa = pd.read_csv("df_somativa.csv")
 
 # Aplicar filtro de turma
 if turma_selecionada != "Todas":
-    diagnostica = diagnostica[diagnostica["TURMA"] == turma_selecionada]
+    diagnostica = diagnostica[diagnostica["ANO ESCOLAR"] == turma_selecionada]
 
 # Separar habilidades por faixa
 diag_habilidades_abaixo = diagnostica[diagnostica["HABILIDADE - FAIXA"].isin(["Baixo", "Médio Baixo"])]
