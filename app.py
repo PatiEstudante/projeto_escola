@@ -71,33 +71,46 @@ def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_med
     prof_mt = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 5º ANO", "MT")
     pmp_lp = calcular_pmp(prof_lp, "5EF", "LP")
     pmp_mt = calcular_pmp(prof_mt, "5EF", "MT")
-    prof_iniciais = (pmp_lp + pmp_mt)/2
-    rend_iniciais = rendimento_anos_iniciais(df_rendimento_fundamental)
-    iders_iniciais = prof_iniciais * rend_iniciais
+
+    if pmp_lp is not None and pmp_mt is not None:
+        prof_iniciais = (pmp_lp + pmp_mt) / 2
+        rend_iniciais = rendimento_anos_iniciais(df_rendimento_fundamental)
+        iders_iniciais = prof_iniciais * rend_iniciais
+    else:
+        iders_iniciais = None
 
     # Anos finais
     prof_lp9 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 9º ANO", "LP")
     prof_mt9 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 9º ANO", "MT")
     pmp_lp9 = calcular_pmp(prof_lp9, "9EF", "LP")
     pmp_mt9 = calcular_pmp(prof_mt9, "9EF", "MT")
-    prof_finais = (pmp_lp9 + pmp_mt9)/2
-    rend_finais = rendimento_anos_finais(df_rendimento_fundamental)
-    iders_finais = prof_finais * rend_finais
+
+    if pmp_lp9 is not None and pmp_mt9 is not None:
+        prof_finais = (pmp_lp9 + pmp_mt9) / 2
+        rend_finais = rendimento_anos_finais(df_rendimento_fundamental)
+        iders_finais = prof_finais * rend_finais
+    else:
+        iders_finais = None
 
     # Ensino médio
     prof_lp3 = calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "LP")
     prof_mt3 = calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "MT")
     pmp_lp3 = calcular_pmp(prof_lp3, "3EM", "LP")
     pmp_mt3 = calcular_pmp(prof_mt3, "3EM", "MT")
-    prof_medio = (pmp_lp3 + pmp_mt3)/2
-    rend_medio = rendimento_ensino_medio(df_rendimento_medio)
-    iders_medio = prof_medio * rend_medio
+
+    if pmp_lp3 is not None and pmp_mt3 is not None:
+        prof_medio = (pmp_lp3 + pmp_mt3) / 2
+        rend_medio = rendimento_ensino_medio(df_rendimento_medio)
+        iders_medio = prof_medio * rend_medio
+    else:
+        iders_medio = None
 
     return {
         "Anos Iniciais": iders_iniciais,
         "Anos Finais": iders_finais,
         "Ensino Médio": iders_medio
     }
+
 #----------------------------------------------
 #             MENU DE SELEÇÃO
 #----------------------------------------------
@@ -167,8 +180,15 @@ else:
     df_rendimento_fundamental = pd.read_csv("df_rendimento_fundamental.csv")
     df_rendimento_medio = pd.read_csv("df_rendimento_medio.csv")
 
-    # Calcular indicadores
-    indicadores = calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_medio)
+# Calcular indicadores
+indicadores = calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_medio)
+
+for etapa, valor in indicadores.items():
+    if valor is None:
+        st.warning(f"⚠️ Não foi possível calcular o IDERS para {etapa}. Verifique os dados.")
+    else:
+        st.metric(etapa, f"{valor:.2f}")
+
 
     # Exibir métricas lado a lado
     col1, col2, col3 = st.columns(3)
