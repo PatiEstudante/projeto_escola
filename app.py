@@ -34,7 +34,7 @@ def calcular_proficiencia(df, etapa, disciplina):
     if dados.empty:
         return None
     # média ponderada pela quantidade de turmas
-    prof_media = (dados["Proficiência Média"].sum()) / dados["Turmas"].sum()
+    prof_media = (dados["Proficiência Média"].sum()) / dados["Turma"].sum()
     return prof_media
 
 # 3. Função para calcular PMP
