@@ -203,15 +203,15 @@ else:
     pmp_mt5 = calcular_pmp(prof_mt5, "5EF", "MT")
     rend_iniciais = rendimento_anos_iniciais(df_rendimento_fundamental)
 
-    st.subheader("🔍 Verificação dos valores para Anos Iniciais")
-    st.write({
-        "Proficiência LP (média)": prof_lp5,
-        "Proficiência MT (média)": prof_mt5,
-        "PMP LP": pmp_lp5,
-        "PMP MT": pmp_mt5,
-        "Rendimento": rend_iniciais,
-        "IDERS Anos Iniciais": indicadores["Anos Iniciais"]
-    })
+    #st.subheader("🔍 Verificação dos valores para Anos Iniciais")
+    #st.write({
+        #"Proficiência LP (média)": prof_lp5,
+        #"Proficiência MT (média)": prof_mt5,
+        #"PMP LP": pmp_lp5,
+        #"PMP MT": pmp_mt5,
+        #"Rendimento": rend_iniciais,
+        #"IDERS Anos Iniciais": indicadores["Anos Iniciais"]
+    #})
 
     # 🔍 Debug Anos Finais (9EF)
     prof_lp9 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 9º ANO", "LP")
@@ -220,15 +220,15 @@ else:
     pmp_mt9 = calcular_pmp(prof_mt9, "9EF", "MT")
     rend_finais = rendimento_anos_finais(df_rendimento_fundamental)
 
-    st.subheader("🔍 Verificação dos valores para Anos Finais")
-    st.write({
-        "Proficiência LP (média)": prof_lp9,
-        "Proficiência MT (média)": prof_mt9,
-        "PMP LP": pmp_lp9,
-        "PMP MT": pmp_mt9,
-        "Rendimento": rend_finais,
-        "IDERS Anos Finais": indicadores["Anos Finais"]
-    })
+    #st.subheader("🔍 Verificação dos valores para Anos Finais")
+    #st.write({
+        #"Proficiência LP (média)": prof_lp9,
+        #"Proficiência MT (média)": prof_mt9,
+        #"PMP LP": pmp_lp9,
+        #"PMP MT": pmp_mt9,
+        #"Rendimento": rend_finais,
+        #"IDERS Anos Finais": indicadores["Anos Finais"]
+    #})
 
     # 🔍 Debug Ensino Médio (3EM)
     prof_lp3 = calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "LP")
@@ -237,15 +237,15 @@ else:
     pmp_mt3 = calcular_pmp(prof_mt3, "3EM", "MT")
     rend_em = rendimento_ensino_medio(df_rendimento_medio)
 
-    st.subheader("🔍 Verificação dos valores para Ensino Médio")
-    st.write({
-        "Proficiência LP (média)": prof_lp3,
-        "Proficiência MT (média)": prof_mt3,
-        "PMP LP": pmp_lp3,
-        "PMP MT": pmp_mt3,
-        "Rendimento": rend_em,
-        "IDERS Ensino Médio": indicadores["Ensino Médio"]
-    })
+    #st.subheader("🔍 Verificação dos valores para Ensino Médio")
+    #st.write({
+        #"Proficiência LP (média)": prof_lp3,
+        #"Proficiência MT (média)": prof_mt3,
+        #"PMP LP": pmp_lp3,
+        #"PMP MT": pmp_mt3,
+        #"Rendimento": rend_em,
+        #"IDERS Ensino Médio": indicadores["Ensino Médio"]
+    #})
 
     # Exibir métricas lado a lado
     col1, col2, col3 = st.columns(3)
