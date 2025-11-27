@@ -110,7 +110,7 @@ def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_med
 # -------------------------------
 painel = st.sidebar.radio(
     "Escolha o painel:",
-    ["📊 Painel de Desempenho Escolar", "📈 Painel de Indicadores"]
+    ["📊 Painel de Desempenho SAERS - Habilidades", "📈 Painel de Indicadores"]
 )
 
 # -------------------------------
