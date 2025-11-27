@@ -27,15 +27,14 @@ def quebrar_texto(texto, limite=50):
     linhas.append(linha_atual.strip())
     return "\n".join(linhas)
 
-# 2. Função para calcular proficiência média
+#2. Função para calcular proficiência média
 
 def calcular_proficiencia(df, etapa, disciplina):
     dados = df[(df["Etapa"] == etapa) & (df["Componente Curricular"] == disciplina)]
     if dados.empty:
         return None
-    # média ponderada pela quantidade de turmas
-    prof_media = dados.groupby("Turma")["Proficiência Média"].mean().mean()
-    return prof_media
+    # Média simples entre as proficiências por turma
+    return dados["Proficiência Média"].mean()
 
 # 3. Função para calcular PMP
 
@@ -182,6 +181,15 @@ else:
 
 # Calcular indicadores
 indicadores = calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_medio)
+st.subheader("🔍 Verificação dos valores para Ensino Médio")
+    st.write({
+        "Proficiência LP (média)": calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "LP"),
+        "Proficiência MT (média)": calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "MT"),
+        "PMP LP": calcular_pmp(265, "3EM", "LP"),
+        "PMP MT": calcular_pmp(244, "3EM", "MT"),
+        "Rendimento": rendimento_ensino_medio(df_rendimento_medio),
+        "IDERS Ensino Médio": indicadores["Ensino Médio"]
+    })
 
 for etapa, valor in indicadores.items():
     if valor is None:
