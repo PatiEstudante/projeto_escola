@@ -181,15 +181,17 @@ else:
 
 # Calcular indicadores
 indicadores = calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_medio)
+
 st.subheader("🔍 Verificação dos valores para Ensino Médio")
-    st.write({
-        "Proficiência LP (média)": calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "LP"),
-        "Proficiência MT (média)": calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "MT"),
-        "PMP LP": calcular_pmp(265, "3EM", "LP"),
-        "PMP MT": calcular_pmp(244, "3EM", "MT"),
-        "Rendimento": rendimento_ensino_medio(df_rendimento_medio),
-        "IDERS Ensino Médio": indicadores["Ensino Médio"]
-    })
+st.write({
+    "Proficiência LP (média)": calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "LP"),
+    "Proficiência MT (média)": calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "MT"),
+    "PMP LP": calcular_pmp(265, "3EM", "LP"),
+    "PMP MT": calcular_pmp(244, "3EM", "MT"),
+    "Rendimento": rendimento_ensino_medio(df_rendimento_medio),
+    "IDERS Ensino Médio": indicadores["Ensino Médio"]
+})
+
 
 for etapa, valor in indicadores.items():
     if valor is None:
