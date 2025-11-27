@@ -162,7 +162,7 @@ else:
     st.subheader("📈 Painel de Indicadores Educacionais - IDERS 2023")
     st.image("indicadores.png", caption="Entendendo os indicadores", use_column_width=True)
     with open("explicacao_indicadores.pdf", "rb") as f:
-    pdf_bytes = f.read()
+        pdf_bytes = f.read()
 
     st.download_button(label="📄 Baixar PDF explicativo sobre os indicadores",
                        data=pdf_bytes,
