@@ -3,9 +3,9 @@ import pandas as pd
 import plotly.express as px
 import numpy as np
 
-
+# -------------------------------
 # Tabela de limites (IDEB)
-
+# -------------------------------
 limites = pd.DataFrame({
     "Ano": ["5EF","5EF","9EF","9EF","3EM","3EM"],
     "Disciplina": ["MT","LP","MT","LP","MT","LP"],
@@ -13,8 +13,9 @@ limites = pd.DataFrame({
     "Lim_Superior": [322,324,400,400,467,451]
 })
 
-
-# 1. Função para quebrar texto longo (HABILIDADES)
+# -------------------------------
+# Funções auxiliares
+# -------------------------------
 def quebrar_texto(texto, limite=50):
     palavras = texto.split(" ")
     linhas = []
@@ -28,27 +29,20 @@ def quebrar_texto(texto, limite=50):
     linhas.append(linha_atual.strip())
     return "\n".join(linhas)
 
-#2. Função para calcular proficiência média
-
 def calcular_proficiencia(df, etapa, disciplina):
     dados = df[(df["Etapa"] == etapa) & (df["Componente Curricular"] == disciplina)]
     if dados.empty:
         return None
-    # Média simples entre as proficiências por turma
     return dados["Proficiência Média"].mean()
-
-# 3. Função para calcular PMP
 
 def calcular_pmp(prof_media, ano, disciplina):
     if prof_media is None:
         return None
     lim = limites[(limites["Ano"] == ano) & (limites["Disciplina"] == disciplina)]
     if lim.empty:
-        return None  # evita IndexError
+        return None
     lim = lim.iloc[0]
     return ((prof_media - lim["Lim_Inferior"]) / (lim["Lim_Superior"] - lim["Lim_Inferior"])) * 10
-
-#4.Funções de rendimento
 
 def rendimento_ensino_medio(df):
     cols = ["1ª série","2ª série","3ª série"]
@@ -68,16 +62,12 @@ def rendimento_anos_finais(df):
     hm = len(valores) / sum(1.0/v for v in valores)
     return hm / 100.0
 
-
-# 5. Cálculo do IDERS
-
 def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_medio):
     # Anos iniciais
     prof_lp = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 5º ANO", "LP")
     prof_mt = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 5º ANO", "MT")
     pmp_lp = calcular_pmp(prof_lp, "5EF", "LP")
     pmp_mt = calcular_pmp(prof_mt, "5EF", "MT")
-
     if pmp_lp is not None and pmp_mt is not None:
         prof_iniciais = (pmp_lp + pmp_mt) / 2
         rend_iniciais = rendimento_anos_iniciais(df_rendimento_fundamental)
@@ -90,7 +80,6 @@ def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_med
     prof_mt9 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 9º ANO", "MT")
     pmp_lp9 = calcular_pmp(prof_lp9, "9EF", "LP")
     pmp_mt9 = calcular_pmp(prof_mt9, "9EF", "MT")
-
     if pmp_lp9 is not None and pmp_mt9 is not None:
         prof_finais = (pmp_lp9 + pmp_mt9) / 2
         rend_finais = rendimento_anos_finais(df_rendimento_fundamental)
@@ -103,7 +92,6 @@ def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_med
     prof_mt3 = calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "MT")
     pmp_lp3 = calcular_pmp(prof_lp3, "3EM", "LP")
     pmp_mt3 = calcular_pmp(prof_mt3, "3EM", "MT")
-
     if pmp_lp3 is not None and pmp_mt3 is not None:
         prof_medio = (pmp_lp3 + pmp_mt3) / 2
         rend_medio = rendimento_ensino_medio(df_rendimento_medio)
@@ -117,148 +105,69 @@ def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_med
         "Ensino Médio": iders_medio
     }
 
-#----------------------------------------------
-#             MENU DE SELEÇÃO
-#----------------------------------------------
-
+# -------------------------------
+# Menu lateral
+# -------------------------------
 painel = st.sidebar.radio(
     "Escolha o painel:",
     ["📊 Painel de Desempenho Escolar", "📈 Painel de Indicadores"]
 )
 
-#------------------------------------------------
-# PAINEL DE DESEMPENHO ESCOLAR
-#-----------------------------------------------
-
+# -------------------------------
+# Painel de Desempenho Escolar
+# -------------------------------
 if painel == "📊 Painel de Desempenho Escolar":
-    diagnostica = pd.read_csv("df_diagnostico.csv")
-
-    # Filtros e preparação
-    diag_habilidades_abaixo = diagnostica[diagnostica["HABILIDADE - FAIXA"].isin(["Baixo", "Médio Baixo"])]
-    diag_habilidades_acima = diagnostica[diagnostica["HABILIDADE - FAIXA"].isin(["Médio Alto", "Alto"])]
-
-    for df in [diag_habilidades_abaixo, diag_habilidades_acima]:
-        df.sort_values("HABILIDADE - ACERTO %", inplace=True)
-        df["HABILIDADE - DESCRIÇÃO"] = df["HABILIDADE - DESCRIÇÃO"].apply(quebrar_texto)
-
-# Gráfico habilidades abaixo
-    fig_abaixo = px.bar(
-        diag_habilidades_abaixo,
-        x="HABILIDADE - ACERTO %",
-        y="HABILIDADE - DESCRIÇÃO",
-        color="HABILIDADE - FAIXA",
-        orientation="h",
-        title="🔴 Habilidades que precisam ser melhoradas",
-        text="HABILIDADE - ACERTO %",
-        color_discrete_map={"Baixo":"#e63946", "Médio Baixo":"#f4a261"}
-    )
-    fig_abaixo.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
-
-    # Gráfico habilidades acima
-    fig_acima = px.bar(
-        diag_habilidades_acima,
-        x="HABILIDADE - ACERTO %",
-        y="HABILIDADE - DESCRIÇÃO",
-        color="HABILIDADE - FAIXA",
-        orientation="h",
-        title="🟢 Habilidades consolidadas",
-        text="HABILIDADE - ACERTO %",
-        color_discrete_map={"Médio Alto":"#457b9d", "Alto":"#2a9d8f"}
-    )
-    fig_acima.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
-
-    # Tabs
-    tab1, tab2 = st.tabs(["🔴 A melhorar", "🟢 Consolidadas"])
-    with tab1:
-        st.plotly_chart(fig_abaixo, use_container_width=True)
-    with tab2:
-        st.plotly_chart(fig_acima, use_container_width=True)
-
-
-# -------------------------------
-# PAINEL DE INDICADORES
-# -------------------------------
-else:
-    st.subheader("📈 Painel de Indicadores Educacionais - IDERS 2023")
-
-    # Carregar dados
-    df_proficiencia = pd.read_csv("df_proficiencia.csv")
-    df_proficiencia["Etapa"] = (
-        df_proficiencia["Etapa"]
-        .str.replace(r"\s+", " ", regex=True)  # substitui múltiplos espaços por um só
-        .str.strip()                           # remove espaços extras
-        .str.upper()                           # coloca tudo em maiúsculo
-    )
-    df_rendimento_fundamental = pd.read_csv("df_rendimento_fundamental.csv")
-    st.write("Colunas do df_rendimento_fundamental:", df_rendimento_fundamental.columns.tolist())
-    df_rendimento_fundamental.columns = (
-    df_rendimento_fundamental.columns
-    .str.strip()      # remove espaços extras
-    .str.lower()      # coloca tudo em minúsculo
-)
-    df_rendimento_medio = pd.read_csv("df_rendimento_medio.csv")
     df_diagnostico = pd.read_csv("df_diagnostico.csv")
 
-    # Calcular indicadores
-    indicadores = calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_medio)
+    etapa_selecionada = st.sidebar.selectbox(
+        "Selecione a etapa:",
+        df_diagnostico["ANO ESCOLAR"].unique()
+    )
+    df_etapa = df_diagnostico[df_diagnostico["ANO ESCOLAR"] == etapa_selecionada]
 
-    # Criar abas
-    tab1, tab2 = st.tabs(["📊 Indicadores", "📈 Gráficos de Desempenho"])
+    col_lp, col_mt = st.columns(2)
 
-    # -------------------------------
-    # Aba 1: Indicadores finais
-    # -------------------------------
-    with tab1:
-        col1, col2, col3 = st.columns(3)
-        for i, etapa in enumerate(["Anos Iniciais", "Anos Finais", "Ensino Médio"]):
-            valor = indicadores.get(etapa)
-            if valor is None:
-                [col1, col2, col3][i].warning(f"⚠️ Não foi possível calcular o IDERS para {etapa}. Verifique os dados.")
-            else:
-                [col1, col2, col3][i].metric(etapa, f"{valor:.2f}")
-
-        # Gráfico comparativo dos indicadores
-        st.bar_chart(pd.DataFrame.from_dict(indicadores, orient="index", columns=["IDERS 2023"]))
-
-    # -------------------------------
-    # Aba 2: Gráficos por etapa
-    # -------------------------------
-    with tab2:
-        etapa_selecionada = st.sidebar.selectbox(
-            "Selecione a etapa para visualizar:",
-            df_diagnostico["ANO ESCOLAR"].unique()
-        )
-        df_etapa = df_diagnostico[df_diagnostico["ANO ESCOLAR"] == etapa_selecionada]
-
-        # Gráfico LP
+    with col_lp:
         fig_lp = px.bar(
             df_etapa[df_etapa["COMPONENTE CURRICULAR"] == "LP"],
             x="HABILIDADE - ACERTO %",
             y="HABILIDADE - DESCRIÇÃO",
             color="HABILIDADE - FAIXA",
             orientation="h",
-            title=f"Desempenho em Língua Portuguesa - {etapa_selecionada}",
+            title=f"LP - {etapa_selecionada}",
             text="HABILIDADE - ACERTO %",
-            color_discrete_map={"Baixo":"#e63946", "Médio Baixo":"#f4a261", "Médio Alto":"#457b9d", "Alto":"#2a9d8f"}
+            color_discrete_map={"Baixo":"#e63946","Médio Baixo":"#f4a261","Médio Alto":"#457b9d","Alto":"#2a9d8f"}
         )
         fig_lp.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
+        st.plotly_chart(fig_lp, use_container_width=True)
 
-        # Gráfico MT
+    with col_mt:
         fig_mt = px.bar(
             df_etapa[df_etapa["COMPONENTE CURRICULAR"] == "MT"],
             x="HABILIDADE - ACERTO %",
             y="HABILIDADE - DESCRIÇÃO",
             color="HABILIDADE - FAIXA",
             orientation="h",
-            title=f"Desempenho em Matemática - {etapa_selecionada}",
+            title=f"MT - {etapa_selecionada}",
             text="HABILIDADE - ACERTO %",
-            color_discrete_map={"Baixo":"#e63946", "Médio Baixo":"#f4a261", "Médio Alto":"#457b9d", "Alto":"#2a9d8f"}
+            color_discrete_map={"Baixo":"#e63946","Médio Baixo":"#f4a261","Médio Alto":"#457b9d","Alto":"#2a9d8f"}
         )
         fig_mt.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
+        st.plotly_chart(fig_mt, use_container_width=True)
 
-        # Exibir gráficos lado a lado
-        col_lp, col_mt = st.columns(2)
-        with col_lp:
-            st.plotly_chart(fig_lp, use_container_width=True)
-        with col_mt:
-            st.plotly_chart(fig_mt, use_container_width=True)
+# -------------------------------
+# Painel de Indicadores
+# -------------------------------
+else:
+    st.subheader("📈 Painel de Indicadores Educacionais - IDERS 2023")
+
+    df_proficiencia = pd.read_csv("df_proficiencia.csv")
+    df_proficiencia["Etapa"] = (
+        df_proficiencia["Etapa"]
+        .str.replace(r"\s+", " ", regex=True)
+        .str.strip()
+        .str.upper()
+    )
+    df_rendimento_fundamental = pd.read_csv("df_rendimento_fundamental.csv")
+    df_rendimento_fundamental.columns = df_rendimento_fundamental.columns.str.strip().str.lower()
+    df_rendimento_medio = pd.read_csv("df_rendimento_medio.csv
