@@ -57,13 +57,13 @@ def rendimento_ensino_medio(df):
     return hm / 100.0
 
 def rendimento_anos_iniciais(df):
-    cols = ["1º Ano","2º Ano","3º Ano","4º Ano","5º Ano"]
+    cols = ["1º ano","2º ano","3º ano","4º ano","5º ano"]
     valores = [float(df[c].iloc[0]) for c in cols]
     hm = len(valores) / sum(1.0/v for v in valores)
     return hm / 100.0
 
 def rendimento_anos_finais(df):
-    cols = ["6º Ano","7º Ano","8º Ano","9º Ano"]
+    cols = ["6º ano","7º ano","8º ano","9º ano"]
     valores = [float(df[c].iloc[0]) for c in cols]
     hm = len(valores) / sum(1.0/v for v in valores)
     return hm / 100.0
@@ -190,6 +190,12 @@ else:
         .str.upper()                           # coloca tudo em maiúsculo
     )
     df_rendimento_fundamental = pd.read_csv("df_rendimento_fundamental.csv")
+    st.write("Colunas do df_rendimento_fundamental:", df_rendimento_fundamental.columns.tolist())
+    df_rendimento_fundamental.columns = (
+    df_rendimento_fundamental.columns
+    .str.strip()      # remove espaços extras
+    .str.lower()      # coloca tudo em minúsculo
+)
     df_rendimento_medio = pd.read_csv("df_rendimento_medio.csv")
     df_diagnostico = pd.read_csv("df_diagnostico.csv")
 
