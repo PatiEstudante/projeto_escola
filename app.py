@@ -48,38 +48,25 @@ def calcular_pmp(prof_media, ano, disciplina):
     lim = lim.iloc[0]
     return ((prof_media - lim["Lim_Inferior"]) / (lim["Lim_Superior"] - lim["Lim_Inferior"])) * 10
 
-#4. Funções de rendimento
-
-def _to_decimal(v):
-    # aceita string com vírgula, porcentagem ou número
-    if pd.isna(v):
-        return None
-    if isinstance(v, str):
-        v = v.strip().replace('%', '').replace(',', '.')
-    try:
-        x = float(v)
-    except:
-        return None
-    # se vier como 79.9 (0–100), converte para 0.799
-    return x/100.0 if x > 1 else x
-
-def _harmonic_mean(values):
-    vals = [_to_decimal(v) for v in values]
-    if any(v is None or v <= 0 for v in vals):
-        return None
-    return len(vals) / sum(1.0/v for v in vals)
-
-def rendimento_anos_iniciais(df):
-    cols = ["1º Ano","2º Ano","3º Ano","4º Ano","5º Ano"]
-    return _harmonic_mean([df[c].iloc[0] for c in cols])
-
-def rendimento_anos_finais(df):
-    cols = ["6º Ano","7º Ano","8º Ano","9º Ano"]
-    return _harmonic_mean([df[c].iloc[0] for c in cols])
+#4.Funções de rendimento
 
 def rendimento_ensino_medio(df):
     cols = ["1ª série","2ª série","3ª série"]
-    return _harmonic_mean([df[c].iloc[0] for c in cols])
+    valores = [float(df[c].iloc[0]) for c in cols]
+    hm = len(valores) / sum(1.0/v for v in valores)
+    return hm / 100.0
+
+def rendimento_anos_iniciais(df):
+    cols = ["1º Ano","2º Ano","3º Ano","4º Ano","5º Ano"]
+    valores = [float(df[c].iloc[0]) for c in cols]
+    hm = len(valores) / sum(1.0/v for v in valores)
+    return hm / 100.0
+
+def rendimento_anos_finais(df):
+    cols = ["6º Ano","7º Ano","8º Ano","9º Ano"]
+    valores = [float(df[c].iloc[0]) for c in cols]
+    hm = len(valores) / sum(1.0/v for v in valores)
+    return hm / 100.0
 
 
 # 5. Cálculo do IDERS
