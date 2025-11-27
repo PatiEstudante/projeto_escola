@@ -160,7 +160,16 @@ if painel == "📊 Painel de Desempenho Escolar":
 # -------------------------------
 else:
     st.subheader("📈 Painel de Indicadores Educacionais - IDERS 2023")
+    st.image("indicadores.png", caption="Entendendo os indicadores", use_column_width=True)
+    with open("explicacao_indicadores.pdf", "rb") as f:
+    pdf_bytes = f.read()
 
+st.download_button(
+    label="📄 Baixar PDF explicativo sobre os indicadores",
+    data=pdf_bytes,
+    file_name="indicadores_IDERS_IDEB.pdf",
+    mime="application/pdf"
+)
     # Carregar dados
     df_proficiencia = pd.read_csv("df_proficiencia.csv")
     df_proficiencia["Etapa"] = (
