@@ -1,3 +1,6 @@
 streamlit
 pandas
 plotly
+Referências das figuras usadas nas imagens: 
+<a href="https://www.flaticon.com/free-icons/doubt" title="doubt icons">Doubt icons created by Karyative - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/teacher" title="teacher icons">Teacher icons created by Freepik - Flaticon</a>
