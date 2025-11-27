@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import numpy as np
 
 
 # Tabela de limites (IDEB)
@@ -47,19 +48,38 @@ def calcular_pmp(prof_media, ano, disciplina):
     lim = lim.iloc[0]
     return ((prof_media - lim["Lim_Inferior"]) / (lim["Lim_Superior"] - lim["Lim_Inferior"])) * 10
 
-# 4. Funções de rendimento
+#4. Funções de rendimento
+
+def _to_decimal(v):
+    # aceita string com vírgula, porcentagem ou número
+    if pd.isna(v):
+        return None
+    if isinstance(v, str):
+        v = v.strip().replace('%', '').replace(',', '.')
+    try:
+        x = float(v)
+    except:
+        return None
+    # se vier como 79.9 (0–100), converte para 0.799
+    return x/100.0 if x > 1 else x
+
+def _harmonic_mean(values):
+    vals = [_to_decimal(v) for v in values]
+    if any(v is None or v <= 0 for v in vals):
+        return None
+    return len(vals) / sum(1.0/v for v in vals)
 
 def rendimento_anos_iniciais(df):
-    tx = sum([1/df[col].iloc[0] for col in ["1º Ano","2º Ano","3º Ano","4º Ano","5º Ano"]])
-    return 5/tx
+    cols = ["1º Ano","2º Ano","3º Ano","4º Ano","5º Ano"]
+    return _harmonic_mean([df[c].iloc[0] for c in cols])
 
 def rendimento_anos_finais(df):
-    tx = sum([1/df[col].iloc[0] for col in ["6º Ano","7º Ano","8º Ano","9º Ano"]])
-    return 4/tx
+    cols = ["6º Ano","7º Ano","8º Ano","9º Ano"]
+    return _harmonic_mean([df[c].iloc[0] for c in cols])
 
 def rendimento_ensino_medio(df):
-    tx = sum([1/df[col].iloc[0] for col in ["1ª série","2ª série","3ª série"]])
-    return 3/tx
+    cols = ["1ª série","2ª série","3ª série"]
+    return _harmonic_mean([df[c].iloc[0] for c in cols])
 
 
 # 5. Cálculo do IDERS
