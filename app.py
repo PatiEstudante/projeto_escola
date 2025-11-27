@@ -191,6 +191,7 @@ else:
     )
     df_rendimento_fundamental = pd.read_csv("df_rendimento_fundamental.csv")
     df_rendimento_medio = pd.read_csv("df_rendimento_medio.csv")
+    df_diagnostico = pd.read_csv("df_diagnostico.csv")
 
     # Calcular indicadores
     indicadores = calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_medio)
@@ -219,42 +220,39 @@ else:
     with tab2:
         etapa_selecionada = st.sidebar.selectbox(
             "Selecione a etapa para visualizar:",
-            ["5º Ano", "9º Ano", "3ª Série (EM)"]
+            df_diagnostico["ANO ESCOLAR"].unique()
         )
-
-        # Mapear etapa para filtro
-        if etapa_selecionada == "5º Ano":
-            etapa_filtro = "ENSINO FUNDAMENTAL - 5º ANO"
-        elif etapa_selecionada == "9º Ano":
-            etapa_filtro = "ENSINO FUNDAMENTAL - 9º ANO"
-        else:
-            etapa_filtro = "ENSINO MEDIO - 3ª SERIE"
-
-        # Filtrar dados da etapa
-        df_etapa = df_proficiencia[df_proficiencia["Etapa"] == etapa_filtro]
+        df_etapa = df_diagnostico[df_diagnostico["ANO ESCOLAR"] == etapa_selecionada]
 
         # Gráfico LP
         fig_lp = px.bar(
-            df_etapa[df_etapa["Componente Curricular"] == "LP"],
-            x="Turma",
-            y="Proficiência Média",
+            df_etapa[df_etapa["COMPONENTE CURRICULAR"] == "LP"],
+            x="HABILIDADE - ACERTO %",
+            y="HABILIDADE - DESCRIÇÃO",
+            color="HABILIDADE - FAIXA",
+            orientation="h",
             title=f"Desempenho em Língua Portuguesa - {etapa_selecionada}",
-            text="Proficiência Média",
-            color="Turma"
+            text="HABILIDADE - ACERTO %",
+            color_discrete_map={"Baixo":"#e63946", "Médio Baixo":"#f4a261", "Médio Alto":"#457b9d", "Alto":"#2a9d8f"}
         )
-        fig_lp.update_traces(texttemplate='%{text:.0f}', textposition='outside')
+        fig_lp.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
 
         # Gráfico MT
         fig_mt = px.bar(
-            df_etapa[df_etapa["Componente Curricular"] == "MT"],
-            x="Turma",
-            y="Proficiência Média",
+            df_etapa[df_etapa["COMPONENTE CURRICULAR"] == "MT"],
+            x="HABILIDADE - ACERTO %",
+            y="HABILIDADE - DESCRIÇÃO",
+            color="HABILIDADE - FAIXA",
+            orientation="h",
             title=f"Desempenho em Matemática - {etapa_selecionada}",
-            text="Proficiência Média",
-            color="Turma"
+            text="HABILIDADE - ACERTO %",
+            color_discrete_map={"Baixo":"#e63946", "Médio Baixo":"#f4a261", "Médio Alto":"#457b9d", "Alto":"#2a9d8f"}
         )
-        fig_mt.update_traces(texttemplate='%{text:.0f}', textposition='outside')
+        fig_mt.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
 
-        # Exibir gráficos
-        st.plotly_chart(fig_lp, use_container_width=True)
-        st.plotly_chart(fig_mt, use_container_width=True)
+        # Exibir gráficos lado a lado
+        col_lp, col_mt = st.columns(2)
+        with col_lp:
+            st.plotly_chart(fig_lp, use_container_width=True)
+        with col_mt:
+            st.plotly_chart(fig_mt, use_container_width=True)
