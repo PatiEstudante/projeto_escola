@@ -161,13 +161,32 @@ if painel == "📊 Painel de Desempenho Escolar":
 else:
     st.subheader("📈 Painel de Indicadores Educacionais - IDERS 2023")
 
+    # Carregar dados
     df_proficiencia = pd.read_csv("df_proficiencia.csv")
     df_proficiencia["Etapa"] = (
         df_proficiencia["Etapa"]
-        .str.replace(r"\s+", " ", regex=True)
-        .str.strip()
-        .str.upper()
+        .str.replace(r"\s+", " ", regex=True)  # substitui múltiplos espaços por um só
+        .str.strip()                           # remove espaços extras
+        .str.upper()                           # coloca tudo em maiúsculo
     )
+
     df_rendimento_fundamental = pd.read_csv("df_rendimento_fundamental.csv")
     df_rendimento_fundamental.columns = df_rendimento_fundamental.columns.str.strip().str.lower()
-    df_rendimento_medio = pd.read_csv("df_rendimento_medio.csv
+
+    df_rendimento_medio = pd.read_csv("df_rendimento_medio.csv")
+    df_rendimento_medio.columns = df_rendimento_medio.columns.str.strip().str.lower()
+
+    # Calcular indicadores
+    indicadores = calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_medio)
+
+    # Exibir métricas lado a lado
+    col1, col2, col3 = st.columns(3)
+    for i, etapa in enumerate(["Anos Iniciais", "Anos Finais", "Ensino Médio"]):
+        valor = indicadores.get(etapa)
+        if valor is None:
+            [col1, col2, col3][i].warning(f"⚠️ Não foi possível calcular o IDERS para {etapa}.")
+        else:
+            [col1, col2, col3][i].metric(etapa, f"{valor:.2f}")
+
+    # Gráfico comparativo dos indicadores
+    st.bar_chart(pd.DataFrame.from_dict(indicadores, orient="index", columns=["IDERS 2023"]))
