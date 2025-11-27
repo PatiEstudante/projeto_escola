@@ -116,7 +116,7 @@ painel = st.sidebar.radio(
 # -------------------------------
 # Painel de Desempenho Escolar
 # -------------------------------
-if painel == "📊 Painel de Desempenho Escolar":
+if painel == "📊 Painel de Desempenho SAERS - Habilidades":
     df_diagnostico = pd.read_csv("df_diagnostico.csv")
 
     etapa_selecionada = st.sidebar.selectbox(
