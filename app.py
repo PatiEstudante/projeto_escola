@@ -189,19 +189,50 @@ else:
 # Calcular indicadores
 indicadores = calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_medio)
 
-st.subheader("🔍 Verificação dos valores para Ensino Médio")
+# 🔍 Debug Anos Iniciais (5EF)
+prof_lp5 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 5º ANO", "LP")
+prof_mt5 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 5º ANO", "MT")
+pmp_lp5 = calcular_pmp(prof_lp5, "5EF", "LP")
+pmp_mt5 = calcular_pmp(prof_mt5, "5EF", "MT")
+rend_iniciais = rendimento_anos_iniciais(df_rendimento_fundamental)
 
-# calcular proficiências médias diretamente do df
+st.subheader("🔍 Verificação dos valores para Anos Iniciais")
+st.write({
+    "Proficiência LP (média)": prof_lp5,
+    "Proficiência MT (média)": prof_mt5,
+    "PMP LP": pmp_lp5,
+    "PMP MT": pmp_mt5,
+    "Rendimento": rend_iniciais,
+    "IDERS Anos Iniciais": indicadores["Anos Iniciais"]
+})
+
+
+# 🔍 Debug Anos Finais (9EF)
+prof_lp9 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 9º ANO", "LP")
+prof_mt9 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 9º ANO", "MT")
+pmp_lp9 = calcular_pmp(prof_lp9, "9EF", "LP")
+pmp_mt9 = calcular_pmp(prof_mt9, "9EF", "MT")
+rend_finais = rendimento_anos_finais(df_rendimento_fundamental)
+
+st.subheader("🔍 Verificação dos valores para Anos Finais")
+st.write({
+    "Proficiência LP (média)": prof_lp9,
+    "Proficiência MT (média)": prof_mt9,
+    "PMP LP": pmp_lp9,
+    "PMP MT": pmp_mt9,
+    "Rendimento": rend_finais,
+    "IDERS Anos Finais": indicadores["Anos Finais"]
+})
+
+
+# 🔍 Debug Ensino Médio (3EM)
 prof_lp3 = calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "LP")
 prof_mt3 = calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "MT")
-
-# calcular PMP com base nas proficiências médias
 pmp_lp3 = calcular_pmp(prof_lp3, "3EM", "LP")
 pmp_mt3 = calcular_pmp(prof_mt3, "3EM", "MT")
-
-# calcular rendimento com a função corrigida
 rend_em = rendimento_ensino_medio(df_rendimento_medio)
 
+st.subheader("🔍 Verificação dos valores para Ensino Médio")
 st.write({
     "Proficiência LP (média)": prof_lp3,
     "Proficiência MT (média)": prof_mt3,
@@ -212,11 +243,6 @@ st.write({
 })
 
 
-for etapa, valor in indicadores.items():
-    if valor is None:
-        st.warning(f"⚠️ Não foi possível calcular o IDERS para {etapa}. Verifique os dados.")
-    else:
-        st.metric(etapa, f"{valor:.2f}")
 
 
     # Exibir métricas lado a lado
