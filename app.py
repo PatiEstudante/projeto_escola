@@ -136,7 +136,7 @@ if painel == "📊 Painel de Desempenho Escolar":
             orientation="h",
             title=f"LP - {etapa_selecionada}",
             text="HABILIDADE - ACERTO %",
-            color_discrete_map={"Baixo":"#e63946","Médio Baixo":"#f4a261","Médio Alto":"#457b9d","Alto":"#2a9d8f"}
+            color_discrete_map={"Baixo":"#FF0000","Médio Baixo":"#FFA500","Médio Alto":"#FFFF00","Alto":"#008000"}
         )
         fig_lp.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
         st.plotly_chart(fig_lp, use_container_width=True)
@@ -150,7 +150,7 @@ if painel == "📊 Painel de Desempenho Escolar":
             orientation="h",
             title=f"MT - {etapa_selecionada}",
             text="HABILIDADE - ACERTO %",
-            color_discrete_map={"Baixo":"#e63946","Médio Baixo":"#f4a261","Médio Alto":"#457b9d","Alto":"#2a9d8f"}
+            color_discrete_map={"Baixo":"#FF0000","Médio Baixo":"#FFA500","Médio Alto":"#FFFF00","Alto":"#008000"}
         )
         fig_mt.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
         st.plotly_chart(fig_mt, use_container_width=True)
