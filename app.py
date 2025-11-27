@@ -183,6 +183,9 @@ else:
 
     # Carregar dados
     df_proficiencia = pd.read_csv("df_proficiencia.csv")
+    df_proficiencia["Etapa"] = (
+    df_proficiencia["Etapa"]
+    .str.replace(r"\s+", " ", regex=True).str.strip().str.upper())
     df_rendimento_fundamental = pd.read_csv("df_rendimento_fundamental.csv")
     df_rendimento_medio = pd.read_csv("df_rendimento_medio.csv")
 
