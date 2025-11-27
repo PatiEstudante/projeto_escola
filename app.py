@@ -184,77 +184,77 @@ else:
     # Carregar dados
     df_proficiencia = pd.read_csv("df_proficiencia.csv")
     df_proficiencia["Etapa"] = (
-    df_proficiencia["Etapa"]
-    .str.replace(r"\s+", " ", regex=True).str.strip().str.upper())
+        df_proficiencia["Etapa"]
+        .str.replace(r"\s+", " ", regex=True)  # substitui múltiplos espaços por um só
+        .str.strip()                           # remove espaços extras
+        .str.upper()                           # coloca tudo em maiúsculo
+    )
     df_rendimento_fundamental = pd.read_csv("df_rendimento_fundamental.csv")
     df_rendimento_medio = pd.read_csv("df_rendimento_medio.csv")
-
-    # Normalizar nomes das colunas para evitar KeyError
-    df_rendimento_fundamental.columns = df_rendimento_fundamental.columns.str.strip()
-    df_rendimento_medio.columns = df_rendimento_medio.columns.str.strip()
 
     # Calcular indicadores
     indicadores = calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_medio)
 
-    # 🔍 Debug Anos Iniciais (5EF)
-    prof_lp5 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 5º ANO", "LP")
-    prof_mt5 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 5º ANO", "MT")
-    pmp_lp5 = calcular_pmp(prof_lp5, "5EF", "LP")
-    pmp_mt5 = calcular_pmp(prof_mt5, "5EF", "MT")
-    rend_iniciais = rendimento_anos_iniciais(df_rendimento_fundamental)
+    # Criar abas
+    tab1, tab2 = st.tabs(["📊 Indicadores", "📈 Gráficos de Desempenho"])
 
-    #st.subheader("🔍 Verificação dos valores para Anos Iniciais")
-    #st.write({
-        #"Proficiência LP (média)": prof_lp5,
-        #"Proficiência MT (média)": prof_mt5,
-        #"PMP LP": pmp_lp5,
-        #"PMP MT": pmp_mt5,
-        #"Rendimento": rend_iniciais,
-        #"IDERS Anos Iniciais": indicadores["Anos Iniciais"]
-    #})
+    # -------------------------------
+    # Aba 1: Indicadores finais
+    # -------------------------------
+    with tab1:
+        col1, col2, col3 = st.columns(3)
+        for i, etapa in enumerate(["Anos Iniciais", "Anos Finais", "Ensino Médio"]):
+            valor = indicadores.get(etapa)
+            if valor is None:
+                [col1, col2, col3][i].warning(f"⚠️ Não foi possível calcular o IDERS para {etapa}. Verifique os dados.")
+            else:
+                [col1, col2, col3][i].metric(etapa, f"{valor:.2f}")
 
-    # 🔍 Debug Anos Finais (9EF)
-    prof_lp9 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 9º ANO", "LP")
-    prof_mt9 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 9º ANO", "MT")
-    pmp_lp9 = calcular_pmp(prof_lp9, "9EF", "LP")
-    pmp_mt9 = calcular_pmp(prof_mt9, "9EF", "MT")
-    rend_finais = rendimento_anos_finais(df_rendimento_fundamental)
+        # Gráfico comparativo dos indicadores
+        st.bar_chart(pd.DataFrame.from_dict(indicadores, orient="index", columns=["IDERS 2023"]))
 
-    #st.subheader("🔍 Verificação dos valores para Anos Finais")
-    #st.write({
-        #"Proficiência LP (média)": prof_lp9,
-        #"Proficiência MT (média)": prof_mt9,
-        #"PMP LP": pmp_lp9,
-        #"PMP MT": pmp_mt9,
-        #"Rendimento": rend_finais,
-        #"IDERS Anos Finais": indicadores["Anos Finais"]
-    #})
+    # -------------------------------
+    # Aba 2: Gráficos por etapa
+    # -------------------------------
+    with tab2:
+        etapa_selecionada = st.sidebar.selectbox(
+            "Selecione a etapa para visualizar:",
+            ["5º Ano", "9º Ano", "3ª Série (EM)"]
+        )
 
-    # 🔍 Debug Ensino Médio (3EM)
-    prof_lp3 = calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "LP")
-    prof_mt3 = calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "MT")
-    pmp_lp3 = calcular_pmp(prof_lp3, "3EM", "LP")
-    pmp_mt3 = calcular_pmp(prof_mt3, "3EM", "MT")
-    rend_em = rendimento_ensino_medio(df_rendimento_medio)
-
-    #st.subheader("🔍 Verificação dos valores para Ensino Médio")
-    #st.write({
-        #"Proficiência LP (média)": prof_lp3,
-        #"Proficiência MT (média)": prof_mt3,
-        #"PMP LP": pmp_lp3,
-        #"PMP MT": pmp_mt3,
-        #"Rendimento": rend_em,
-        #"IDERS Ensino Médio": indicadores["Ensino Médio"]
-    #})
-
-    # Exibir métricas lado a lado
-    col1, col2, col3 = st.columns(3)
-    for i, etapa in enumerate(["Anos Iniciais", "Anos Finais", "Ensino Médio"]):
-        valor = indicadores.get(etapa)
-        if valor is None:
-            [col1, col2, col3][i].warning(f"⚠️ Não foi possível calcular o IDERS para {etapa}. Verifique os dados.")
+        # Mapear etapa para filtro
+        if etapa_selecionada == "5º Ano":
+            etapa_filtro = "ENSINO FUNDAMENTAL - 5º ANO"
+        elif etapa_selecionada == "9º Ano":
+            etapa_filtro = "ENSINO FUNDAMENTAL - 9º ANO"
         else:
-            [col1, col2, col3][i].metric(etapa, f"{valor:.2f}")
+            etapa_filtro = "ENSINO MEDIO - 3ª SERIE"
 
-    # Opcional: gráfico comparativo
-    st.bar_chart(pd.DataFrame.from_dict(indicadores, orient="index", columns=["IDERS 2023"]))
+        # Filtrar dados da etapa
+        df_etapa = df_proficiencia[df_proficiencia["Etapa"] == etapa_filtro]
+
+        # Gráfico LP
+        fig_lp = px.bar(
+            df_etapa[df_etapa["Componente Curricular"] == "LP"],
+            x="Turma",
+            y="Proficiência Média",
+            title=f"Desempenho em Língua Portuguesa - {etapa_selecionada}",
+            text="Proficiência Média",
+            color="Turma"
+        )
+        fig_lp.update_traces(texttemplate='%{text:.0f}', textposition='outside')
+
+        # Gráfico MT
+        fig_mt = px.bar(
+            df_etapa[df_etapa["Componente Curricular"] == "MT"],
+            x="Turma",
+            y="Proficiência Média",
+            title=f"Desempenho em Matemática - {etapa_selecionada}",
+            text="Proficiência Média",
+            color="Turma"
+        )
+        fig_mt.update_traces(texttemplate='%{text:.0f}', textposition='outside')
+
+        # Exibir gráficos
+        st.plotly_chart(fig_lp, use_container_width=True)
+        st.plotly_chart(fig_mt, use_container_width=True)
