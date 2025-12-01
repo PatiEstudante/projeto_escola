@@ -207,9 +207,11 @@ if painel == "📊 Painel de Desempenho SAERS - Habilidades":
         st.plotly_chart(fig_mt, use_container_width=True)
 
 # -------------------------------
-# Painel de Indicadores – IDERS 2024
+# Painel de Desempenho Escolar
 # -------------------------------
-else:
+if painel == "📊 Painel de Desempenho SAERS - Habilidades":
+    ...
+elif painel == "📈 Painel de Indicadores":
     st.subheader("📊 Painel de Indicadores Educacionais - IDERS 2024")
 
     # Carregar dados atualizados
@@ -248,17 +250,13 @@ else:
         file_name="indicadores_IDERS_2024.pdf",
         mime="application/pdf"
     )
-    
-elif painel == "🎯 Painel de Metas":
-    st.subheader("🎯 Metas por Etapa - IDERS 2024")
 
-    # Criar DataFrame com as metas
+elif painel == "🎯 Painel de Metas":
+    st.subheader("🎯 Metas para 2025")
+
     df_metas = pd.DataFrame({
         "Etapa": ["Anos Iniciais", "Anos Finais", "Ensino Médio"],
         "Meta": [5.43, 5.03, 4.66]
     })
 
-    # Exibir tabela
     st.table(df_metas)
-
-
