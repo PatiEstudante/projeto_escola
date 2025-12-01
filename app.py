@@ -254,9 +254,16 @@ elif painel == "📈 Painel de Indicadores":
 elif painel == "🎯 Painel de Metas":
     st.subheader("🎯 Metas para 2025")
 
-    df_metas = pd.DataFrame({
-        "Etapa": ["Anos Iniciais", "Anos Finais", "Ensino Médio"],
-        "Meta": [5.43, 5.03, 4.66]
-    })
+    # Metas definidas
+    metas = {
+        "Anos Iniciais": 5.43,
+        "Anos Finais": 5.03,
+        "Ensino Médio": 4.66
+    }
 
-    st.table(df_metas)
+    # Exibir em colunas com st.metric
+    col1, col2, col3 = st.columns(3)
+    for i, etapa in enumerate(metas.keys()):
+        valor = metas[etapa]
+        [col1, col2, col3][i].metric(etapa, f"{valor:.2f}")
+
