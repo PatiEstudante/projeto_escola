@@ -87,10 +87,9 @@ def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_med
     else:
         indicadores["Anos Finais"] = None
 
-
-    # Ensino médio
-   prof_lp_3 = df_proficiencia[(df_proficiencia["Disciplina"] == "LP") & (df_proficiencia["Serie"] == "3")]["Proficiencia"].mean()
-   prof_mt_3 = df_proficiencia[(df_proficiencia["Disciplina"] == "MT") & (df_proficiencia["Serie"] == "3")]["Proficiencia"].mean()
+    #Ensino Médio
+    prof_lp_3 = df_proficiencia[(df_proficiencia["Disciplina"] == "LP") & (df_proficiencia["Serie"] == "3")]["Proficiencia"].mean()
+    prof_mt_3 = df_proficiencia[(df_proficiencia["Disciplina"] == "MT") & (df_proficiencia["Serie"] == "3")]["Proficiencia"].mean()
 
     if not pd.isna(prof_lp_3) and not pd.isna(prof_mt_3):
         prof_medio = (prof_lp_3 + prof_mt_3) / 2
