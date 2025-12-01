@@ -64,37 +64,69 @@ def rendimento_anos_finais(df):
 
 def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_medio):
     indicadores = {}
-# ANOS INICIAIS:
+
+    # Padronização mínima
+    df_proficiencia["Disciplina"] = df_proficiencia["Disciplina"].str.upper()
+    df_proficiencia["Serie"] = df_proficiencia["Serie"].astype(str)
+    df_rendimento_fundamental.columns = df_rendimento_fundamental.columns.str.strip()
+    df_rendimento_medio.columns = df_rendimento_medio.columns.str.strip()
+
+    # -------------------------
+    # Proficências
+    # -------------------------
     prof_lp_5 = df_proficiencia[(df_proficiencia["Disciplina"] == "LP") & (df_proficiencia["Serie"] == "5")]["Proficiencia"].mean()
     prof_mt_5 = df_proficiencia[(df_proficiencia["Disciplina"] == "MT") & (df_proficiencia["Serie"] == "5")]["Proficiencia"].mean()
 
-    if not pd.isna(prof_lp_5) and not pd.isna(prof_mt_5):
-        prof_iniciais = (prof_lp_5 + prof_mt_5) / 2
-        rend_iniciais = df_rendimento_fundamental.loc[:, ["1º Ano","2º Ano","3º Ano","4º Ano","5º Ano"]].mean(axis=1).iloc[0] / 100
-        indicadores["Anos Iniciais"] = prof_iniciais * rend_iniciais
-    else:
-        indicadores["Anos Iniciais"] = None
-
-
-    # Anos finais
     prof_lp_9 = df_proficiencia[(df_proficiencia["Disciplina"] == "LP") & (df_proficiencia["Serie"] == "9")]["Proficiencia"].mean()
     prof_mt_9 = df_proficiencia[(df_proficiencia["Disciplina"] == "MT") & (df_proficiencia["Serie"] == "9")]["Proficiencia"].mean()
 
-    if not pd.isna(prof_lp_9) and not pd.isna(prof_mt_9):
-        prof_finais = (prof_lp_9 + prof_mt_9) / 2
-        rend_finais = df_rendimento_fundamental.loc[:, ["6º Ano","7º Ano","8º Ano","9º Ano"]].mean(axis=1).iloc[0] / 100
-        indicadores["Anos Finais"] = prof_finais * rend_finais
-    else:
-        indicadores["Anos Finais"] = None
-
-    #Ensino Médio
     prof_lp_3 = df_proficiencia[(df_proficiencia["Disciplina"] == "LP") & (df_proficiencia["Serie"] == "3")]["Proficiencia"].mean()
     prof_mt_3 = df_proficiencia[(df_proficiencia["Disciplina"] == "MT") & (df_proficiencia["Serie"] == "3")]["Proficiencia"].mean()
 
-    if not pd.isna(prof_lp_3) and not pd.isna(prof_mt_3):
-        prof_medio = (prof_lp_3 + prof_mt_3) / 2
-        rend_medio = df_rendimento_medio.loc[:, ["1ª série","2ª série","3ª série"]].mean(axis=1).iloc[0] / 100
-        indicadores["Ensino Médio"] = prof_medio * rend_medio
+    # -------------------------
+    # Rendimentos por média harmônica
+    # -------------------------
+    def media_harmonica_percentuais(valores):
+        vals = [v for v in valores if pd.notna(v)]
+        if len(vals) == 0:
+            return None
+        inv_sum = sum(1.0 / v for v in vals)
+        mh = len(vals) / inv_sum
+        return mh / 100.0
+
+    if not df_rendimento_fundamental.empty:
+        linha_fund = df_rendimento_fundamental.iloc[0]
+        rend_iniciais = media_harmonica_percentuais([linha_fund.get("1º Ano"), linha_fund.get("2º Ano"),
+                                                     linha_fund.get("3º Ano"), linha_fund.get("4º Ano"),
+                                                     linha_fund.get("5º Ano")])
+        rend_finais = media_harmonica_percentuais([linha_fund.get("6º Ano"), linha_fund.get("7º Ano"),
+                                                   linha_fund.get("8º Ano"), linha_fund.get("9º Ano")])
+    else:
+        rend_iniciais = None
+        rend_finais = None
+
+    if not df_rendimento_medio.empty:
+        linha_medio = df_rendimento_medio.iloc[0]
+        rend_medio = media_harmonica_percentuais([linha_medio.get("1ª série"), linha_medio.get("2ª série"),
+                                                  linha_medio.get("3ª série")])
+    else:
+        rend_medio = None
+
+    # -------------------------
+    # IDERS por etapa (média das proficiências × rendimento)
+    # -------------------------
+    if pd.notna(prof_lp_5) and pd.notna(prof_mt_5) and rend_iniciais is not None:
+        indicadores["Anos Iniciais"] = round(((prof_lp_5 + prof_mt_5) / 2.0) * rend_iniciais, 2)
+    else:
+        indicadores["Anos Iniciais"] = None
+
+    if pd.notna(prof_lp_9) and pd.notna(prof_mt_9) and rend_finais is not None:
+        indicadores["Anos Finais"] = round(((prof_lp_9 + prof_mt_9) / 2.0) * rend_finais, 2)
+    else:
+        indicadores["Anos Finais"] = None
+
+    if pd.notna(prof_lp_3) and pd.notna(prof_mt_3) and rend_medio is not None:
+        indicadores["Ensino Médio"] = round(((prof_lp_3 + prof_mt_3) / 2.0) * rend_medio, 2)
     else:
         indicadores["Ensino Médio"] = None
 
