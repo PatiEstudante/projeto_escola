@@ -72,16 +72,33 @@ def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_med
     df_rendimento_medio.columns = df_rendimento_medio.columns.str.strip()
 
     # -------------------------
-    # Proficências
+    # Função auxiliar: normalizar proficiência pelos limites
     # -------------------------
-    prof_lp_5 = df_proficiencia[(df_proficiencia["Disciplina"] == "LP") & (df_proficiencia["Serie"] == "5")]["Proficiencia"].mean()
-    prof_mt_5 = df_proficiencia[(df_proficiencia["Disciplina"] == "MT") & (df_proficiencia["Serie"] == "5")]["Proficiencia"].mean()
+    def normalizar_proficiencia(ano, disciplina, valor):
+        linha = limites[(limites["Ano"] == ano) & (limites["Disciplina"] == disciplina)]
+        if linha.empty or pd.isna(valor):
+            return None
+        lim_inf = linha["Lim_Inferior"].values[0]
+        lim_sup = linha["Lim_Superior"].values[0]
+        return (valor - lim_inf) / (lim_sup - lim_inf)
 
-    prof_lp_9 = df_proficiencia[(df_proficiencia["Disciplina"] == "LP") & (df_proficiencia["Serie"] == "9")]["Proficiencia"].mean()
-    prof_mt_9 = df_proficiencia[(df_proficiencia["Disciplina"] == "MT") & (df_proficiencia["Serie"] == "9")]["Proficiencia"].mean()
+    # -------------------------
+    # Proficências normalizadas
+    # -------------------------
+    prof_lp_5_raw = df_proficiencia[(df_proficiencia["Disciplina"] == "LP") & (df_proficiencia["Serie"] == "5")]["Proficiencia"].mean()
+    prof_mt_5_raw = df_proficiencia[(df_proficiencia["Disciplina"] == "MT") & (df_proficiencia["Serie"] == "5")]["Proficiencia"].mean()
+    prof_lp_5 = normalizar_proficiencia("5EF", "LP", prof_lp_5_raw)
+    prof_mt_5 = normalizar_proficiencia("5EF", "MT", prof_mt_5_raw)
 
-    prof_lp_3 = df_proficiencia[(df_proficiencia["Disciplina"] == "LP") & (df_proficiencia["Serie"] == "3")]["Proficiencia"].mean()
-    prof_mt_3 = df_proficiencia[(df_proficiencia["Disciplina"] == "MT") & (df_proficiencia["Serie"] == "3")]["Proficiencia"].mean()
+    prof_lp_9_raw = df_proficiencia[(df_proficiencia["Disciplina"] == "LP") & (df_proficiencia["Serie"] == "9")]["Proficiencia"].mean()
+    prof_mt_9_raw = df_proficiencia[(df_proficiencia["Disciplina"] == "MT") & (df_proficiencia["Serie"] == "9")]["Proficiencia"].mean()
+    prof_lp_9 = normalizar_proficiencia("9EF", "LP", prof_lp_9_raw)
+    prof_mt_9 = normalizar_proficiencia("9EF", "MT", prof_mt_9_raw)
+
+    prof_lp_3_raw = df_proficiencia[(df_proficiencia["Disciplina"] == "LP") & (df_proficiencia["Serie"] == "3")]["Proficiencia"].mean()
+    prof_mt_3_raw = df_proficiencia[(df_proficiencia["Disciplina"] == "MT") & (df_proficiencia["Serie"] == "3")]["Proficiencia"].mean()
+    prof_lp_3 = normalizar_proficiencia("3EM", "LP", prof_lp_3_raw)
+    prof_mt_3 = normalizar_proficiencia("3EM", "MT", prof_mt_3_raw)
 
     # -------------------------
     # Rendimentos por média harmônica
@@ -113,19 +130,19 @@ def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_med
         rend_medio = None
 
     # -------------------------
-    # IDERS por etapa (média das proficiências × rendimento)
+    # IDERS por etapa (proficiências normalizadas × rendimento)
     # -------------------------
-    if pd.notna(prof_lp_5) and pd.notna(prof_mt_5) and rend_iniciais is not None:
+    if prof_lp_5 is not None and prof_mt_5 is not None and rend_iniciais is not None:
         indicadores["Anos Iniciais"] = round(((prof_lp_5 + prof_mt_5) / 2.0) * rend_iniciais, 2)
     else:
         indicadores["Anos Iniciais"] = None
 
-    if pd.notna(prof_lp_9) and pd.notna(prof_mt_9) and rend_finais is not None:
+    if prof_lp_9 is not None and prof_mt_9 is not None and rend_finais is not None:
         indicadores["Anos Finais"] = round(((prof_lp_9 + prof_mt_9) / 2.0) * rend_finais, 2)
     else:
         indicadores["Anos Finais"] = None
 
-    if pd.notna(prof_lp_3) and pd.notna(prof_mt_3) and rend_medio is not None:
+    if prof_lp_3 is not None and prof_mt_3 is not None and rend_medio is not None:
         indicadores["Ensino Médio"] = round(((prof_lp_3 + prof_mt_3) / 2.0) * rend_medio, 2)
     else:
         indicadores["Ensino Médio"] = None
