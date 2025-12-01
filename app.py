@@ -248,10 +248,7 @@ else:
         file_name="indicadores_IDERS_2024.pdf",
         mime="application/pdf"
     )
-
-# -------------------------------
-# Painel de Metas
-# -------------------------------
+    
 elif painel == "🎯 Painel de Metas":
     st.subheader("🎯 Metas por Etapa - IDERS 2024")
 
@@ -263,3 +260,5 @@ elif painel == "🎯 Painel de Metas":
 
     # Exibir tabela
     st.table(df_metas)
+
+
