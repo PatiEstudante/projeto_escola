@@ -63,47 +63,43 @@ def rendimento_anos_finais(df):
     return hm / 100.0
 
 def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_medio):
-    # Anos iniciais
-    prof_lp = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 5º ANO", "LP")
-    prof_mt = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 5º ANO", "MT")
-    pmp_lp = calcular_pmp(prof_lp, "5EF", "LP")
-    pmp_mt = calcular_pmp(prof_mt, "5EF", "MT")
-    if pmp_lp is not None and pmp_mt is not None:
-        prof_iniciais = (pmp_lp + pmp_mt) / 2
-        rend_iniciais = rendimento_anos_iniciais(df_rendimento_fundamental)
-        iders_iniciais = prof_iniciais * rend_iniciais
+    indicadores = {}
+# ANOS INICIAIS:
+    prof_lp_5 = df_proficiencia[(df_proficiencia["Disciplina"] == "LP") & (df_proficiencia["Serie"] == "5")]["Proficiencia"].mean()
+    prof_mt_5 = df_proficiencia[(df_proficiencia["Disciplina"] == "MT") & (df_proficiencia["Serie"] == "5")]["Proficiencia"].mean()
+
+    if not pd.isna(prof_lp_5) and not pd.isna(prof_mt_5):
+        prof_iniciais = (prof_lp_5 + prof_mt_5) / 2
+        rend_iniciais = df_rendimento_fundamental.loc[:, ["1º Ano","2º Ano","3º Ano","4º Ano","5º Ano"]].mean(axis=1).iloc[0] / 100
+        indicadores["Anos Iniciais"] = prof_iniciais * rend_iniciais
     else:
-        iders_iniciais = None
+        indicadores["Anos Iniciais"] = None
+
 
     # Anos finais
-    prof_lp9 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 9º ANO", "LP")
-    prof_mt9 = calcular_proficiencia(df_proficiencia, "ENSINO FUNDAMENTAL - 9º ANO", "MT")
-    pmp_lp9 = calcular_pmp(prof_lp9, "9EF", "LP")
-    pmp_mt9 = calcular_pmp(prof_mt9, "9EF", "MT")
-    if pmp_lp9 is not None and pmp_mt9 is not None:
-        prof_finais = (pmp_lp9 + pmp_mt9) / 2
-        rend_finais = rendimento_anos_finais(df_rendimento_fundamental)
-        iders_finais = prof_finais * rend_finais
+    prof_lp_9 = df_proficiencia[(df_proficiencia["Disciplina"] == "LP") & (df_proficiencia["Serie"] == "9")]["Proficiencia"].mean()
+    prof_mt_9 = df_proficiencia[(df_proficiencia["Disciplina"] == "MT") & (df_proficiencia["Serie"] == "9")]["Proficiencia"].mean()
+
+    if not pd.isna(prof_lp_9) and not pd.isna(prof_mt_9):
+        prof_finais = (prof_lp_9 + prof_mt_9) / 2
+        rend_finais = df_rendimento_fundamental.loc[:, ["6º Ano","7º Ano","8º Ano","9º Ano"]].mean(axis=1).iloc[0] / 100
+        indicadores["Anos Finais"] = prof_finais * rend_finais
     else:
-        iders_finais = None
+        indicadores["Anos Finais"] = None
+
 
     # Ensino médio
-    prof_lp3 = calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "LP")
-    prof_mt3 = calcular_proficiencia(df_proficiencia, "ENSINO MEDIO - 3ª SERIE", "MT")
-    pmp_lp3 = calcular_pmp(prof_lp3, "3EM", "LP")
-    pmp_mt3 = calcular_pmp(prof_mt3, "3EM", "MT")
-    if pmp_lp3 is not None and pmp_mt3 is not None:
-        prof_medio = (pmp_lp3 + pmp_mt3) / 2
-        rend_medio = rendimento_ensino_medio(df_rendimento_medio)
-        iders_medio = prof_medio * rend_medio
-    else:
-        iders_medio = None
+   prof_lp_3 = df_proficiencia[(df_proficiencia["Disciplina"] == "LP") & (df_proficiencia["Serie"] == "3")]["Proficiencia"].mean()
+    prof_mt_3 = df_proficiencia[(df_proficiencia["Disciplina"] == "MT") & (df_proficiencia["Serie"] == "3")]["Proficiencia"].mean()
 
-    return {
-        "Anos Iniciais": iders_iniciais,
-        "Anos Finais": iders_finais,
-        "Ensino Médio": iders_medio
-    }
+    if not pd.isna(prof_lp_3) and not pd.isna(prof_mt_3):
+        prof_medio = (prof_lp_3 + prof_mt_3) / 2
+        rend_medio = df_rendimento_medio.loc[:, ["1ª série","2ª série","3ª série"]].mean(axis=1).iloc[0] / 100
+        indicadores["Ensino Médio"] = prof_medio * rend_medio
+    else:
+        indicadores["Ensino Médio"] = None
+
+    return indicadores
 
 # -------------------------------
 # Menu lateral
@@ -158,30 +154,26 @@ if painel == "📊 Painel de Desempenho SAERS - Habilidades":
         st.plotly_chart(fig_mt, use_container_width=True)
 
 # -------------------------------
-# Painel de Indicadores
+# Painel de Indicadores – IDERS 2024
 # -------------------------------
 else:
-    st.subheader("📈 Painel de Indicadores Educacionais - IDERS 2023")
+    st.subheader("📊 Painel de Indicadores Educacionais - IDERS 2024")
 
-    # Carregar dados
-    df_proficiencia = pd.read_csv("df_proficiencia.csv")
-    df_proficiencia["Etapa"] = (
-        df_proficiencia["Etapa"]
-        .str.replace(r"\s+", " ", regex=True)  # substitui múltiplos espaços por um só
-        .str.strip()                           # remove espaços extras
-        .str.upper()                           # coloca tudo em maiúsculo
-    )
+    # Carregar dados atualizados
+    df_proficiencia = pd.read_csv("df_proficiencias24.csv")
+    df_proficiencia["Disciplina"] = df_proficiencia["Disciplina"].str.upper()
+    df_proficiencia["Serie"] = df_proficiencia["Serie"].astype(str)
 
-    df_rendimento_fundamental = pd.read_csv("df_rendimento_fundamental.csv")
-    df_rendimento_fundamental.columns = df_rendimento_fundamental.columns.str.strip().str.lower()
+    df_rendimento_fundamental = pd.read_csv("df_rendimento_fundamental_24.csv")
+    df_rendimento_fundamental.columns = df_rendimento_fundamental.columns.str.strip()
 
-    df_rendimento_medio = pd.read_csv("df_rendimento_medio.csv")
-    df_rendimento_medio.columns = df_rendimento_medio.columns.str.strip().str.lower()
+    df_rendimento_medio = pd.read_csv("df_rendimento_medio24.csv")
+    df_rendimento_medio.columns = df_rendimento_medio.columns.str.strip()
 
-    # Calcular indicadores
+    # Calcular indicadores com a função revisada
     indicadores = calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_medio)
 
-    # Exibir métricas lado a lado
+    # 1️⃣ Métricas
     col1, col2, col3 = st.columns(3)
     for i, etapa in enumerate(["Anos Iniciais", "Anos Finais", "Ensino Médio"]):
         valor = indicadores.get(etapa)
@@ -189,13 +181,17 @@ else:
             [col1, col2, col3][i].warning(f"⚠️ Não foi possível calcular o IDERS para {etapa}.")
         else:
             [col1, col2, col3][i].metric(etapa, f"{valor:.2f}")
-    
-    st.image("indicadores.png", caption="Painel de Indicadores Educacionais - IDERS 2023", use_column_width=True)
-    
+
+    # 2️⃣ Imagem explicativa
+    st.image("indicadores.png", caption="Entendendo os indicadores", use_column_width=True)
+
+    # 3️⃣ Botão para download do PDF
     with open("explicacao_indicadores.pdf", "rb") as f:
         pdf_bytes = f.read()
 
-    st.download_button(label="📄 Baixar PDF explicativo sobre os indicadores",
-                       data=pdf_bytes,
-                       file_name="indicadores_IDERS_IDEB.pdf",
-                       mime="application/pdf")
+    st.download_button(
+        label="📄 Baixar PDF explicativo sobre os indicadores",
+        data=pdf_bytes,
+        file_name="indicadores_IDERS_2024.pdf",
+        mime="application/pdf"
+    )
