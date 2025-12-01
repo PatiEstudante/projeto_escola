@@ -151,10 +151,16 @@ def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_med
 # -------------------------------
 # Menu lateral
 # -------------------------------
+
 painel = st.sidebar.radio(
     "Escolha o painel:",
-    ["📊 Painel de Desempenho SAERS - Habilidades", "📈 Painel de Indicadores"]
+    [
+        "📊 Painel de Desempenho SAERS - Habilidades",
+        "📈 Painel de Indicadores",
+        "🎯 Painel de Metas"
+    ]
 )
+
 
 # -------------------------------
 # Painel de Desempenho Escolar
@@ -242,3 +248,18 @@ else:
         file_name="indicadores_IDERS_2024.pdf",
         mime="application/pdf"
     )
+
+# -------------------------------
+# Painel de Metas
+# -------------------------------
+elif painel == "🎯 Painel de Metas":
+    st.subheader("🎯 Metas por Etapa - IDERS 2024")
+
+    # Criar DataFrame com as metas
+    df_metas = pd.DataFrame({
+        "Etapa": ["Anos Iniciais", "Anos Finais", "Ensino Médio"],
+        "Meta": [5.43, 5.03, 4.66]
+    })
+
+    # Exibir tabela
+    st.table(df_metas)
