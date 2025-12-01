@@ -74,14 +74,13 @@ def calcular_iders(df_proficiencia, df_rendimento_fundamental, df_rendimento_med
     # -------------------------
     # Função auxiliar: normalizar proficiência pelos limites
     # -------------------------
-    def normalizar_proficiencia(ano, disciplina, valor):
-        linha = limites[(limites["Ano"] == ano) & (limites["Disciplina"] == disciplina)]
-        if linha.empty or pd.isna(valor):
-            return None
-        lim_inf = linha["Lim_Inferior"].values[0]
-        lim_sup = linha["Lim_Superior"].values[0]
-        return (valor - lim_inf) / (lim_sup - lim_inf)
-
+def normalizar_proficiencia(df_limites, ano, disciplina, valor):
+    linha = df_limites[(df_limites["Ano"] == ano) & (df_limites["Disciplina"] == disciplina)]
+    if linha.empty or pd.isna(valor):
+        return None
+    lim_inf = linha["Lim_Inferior"].values[0]
+    lim_sup = linha["Lim_Superior"].values[0]
+    return ((valor - lim_inf) / (lim_sup - lim_inf)) * 10
     # -------------------------
     # Proficências normalizadas
     # -------------------------
